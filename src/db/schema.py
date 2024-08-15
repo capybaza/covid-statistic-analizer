@@ -29,8 +29,15 @@ class Gender(Enum):
     male = 'male'
 
 
-imports_table = Table(
-    'imports',
+covid_table = Table(
+    "covid",
     metadata,
-    Column('import_id', Integer, primary_key=True)
+    Column('id', Integer, primary_key=True),
+    Column('observationDate', Date, nullable=False),
+    Column('state', String, nullable=True),
+    Column('country', String, nullable=False),
+    Column('lastUpdate', Date, nullable=False),
+    Column('Confirmed', Integer, nullable=False),
+    Column('Recovered', Integer, nullable=False),
+    Column('Deaths', Integer, nullable=False)
 )
