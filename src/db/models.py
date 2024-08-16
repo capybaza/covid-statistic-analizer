@@ -1,10 +1,8 @@
-from enum import Enum, unique
-
 from sqlalchemy import (
-    Column, Date, Enum as PgEnum, ForeignKey, ForeignKeyConstraint, Integer,
-    MetaData, String, Table,
+    Column, Date, Enum as PgEnum, ForeignKey, Integer, MetaData, String, Table
 )
-
+from sqlalchemy.ext.declarative import declarative_base
+from enum import Enum, unique
 
 # SQLAlchemy рекомендует использовать единый формат для генерации названий для
 # индексов и внешних ключей.
@@ -21,6 +19,7 @@ convention = {
 }
 
 metadata = MetaData(naming_convention=convention)
+Base = declarative_base(metadata=metadata)
 
 
 @unique
@@ -29,15 +28,13 @@ class Gender(Enum):
     male = 'male'
 
 
-covid_table = Table(
-    "covid",
-    metadata,
-    Column('id', Integer, primary_key=True),
-    Column('observationDate', Date, nullable=False),
-    Column('state', String, nullable=True),
-    Column('country', String, nullable=False),
-    Column('lastUpdate', Date, nullable=False),
-    Column('Confirmed', Integer, nullable=False),
-    Column('Recovered', Integer, nullable=False),
-    Column('Deaths', Integer, nullable=False)
-)
+class Covid(Base):
+    __tablename__ = "covid"
+    id = Column(Integer, primary_key=True)
+    observationDate = Column(Date, nullable=False)
+    state = Column(String, nullable=True)
+    country = Column(String, nullable=False)
+    lastUpdate = Column(Date, nullable=False)
+    Confirmed = Column(Integer, nullable=False)
+    Recovered = Column(Integer, nullable=False)
+    Deaths = Column(Integer, nullable=False)
