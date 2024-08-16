@@ -1,12 +1,12 @@
 from pydantic import BaseModel
-from datetime import date
+from datetime import datetime
 
 
 class CovidBase(BaseModel):
-    observationDate: date
+    observationDate: datetime
     state: str = None
     country: str
-    lastUpdate: date
+    lastUpdate: datetime
     Confirmed: int
     Recovered: int
     Deaths: int

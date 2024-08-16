@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Date, Enum as PgEnum, ForeignKey, Integer, MetaData, String, Table
+    Column, Date, DateTime, Enum as PgEnum, ForeignKey, Integer, MetaData, String, Table
 )
 from sqlalchemy.ext.declarative import declarative_base
 from enum import Enum, unique
@@ -31,10 +31,10 @@ class Gender(Enum):
 class Covid(Base):
     __tablename__ = "covid"
     id = Column(Integer, primary_key=True)
-    observationDate = Column(Date, nullable=False)
+    observationDate = Column(DateTime, nullable=False)
     state = Column(String, nullable=True)
     country = Column(String, nullable=False)
-    lastUpdate = Column(Date, nullable=False)
+    lastUpdate = Column(DateTime, nullable=False)
     Confirmed = Column(Integer, nullable=False)
     Recovered = Column(Integer, nullable=False)
     Deaths = Column(Integer, nullable=False)
