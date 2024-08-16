@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from src.db import crud, models, schemas
+from src.db import schemas
+from .handlers.covid import covid_manager
 from src.db.db import SessionLocal
 
-from .handlers.covid import router as covid_router
+from .endpoints.covid import router as covid_router
 
 router = APIRouter()
 

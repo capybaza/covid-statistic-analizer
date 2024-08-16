@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from src.db import models, schemas
-from sqlalchemy.exc import IntegrityError
-from datetime import date  # Импортируем date из модуля datetime
+from datetime import date
 
 
 def get_existing_covid_case(db: Session, country: str, state: str, observation_date: date) -> models.Covid:
@@ -35,6 +34,5 @@ def create_covid_case(db: Session, covid_case: schemas.CovidCreate) -> models.Co
     )
 
     db.add(db_covid_case)
-    #db.refresh(db_covid_case)
 
     return db_covid_case

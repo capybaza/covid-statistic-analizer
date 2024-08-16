@@ -1,22 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
-from sqlalchemy.orm import Session
-import pandas as pd
-from src.db import schemas, crud
-from src.db.db import get_db
-from src.utils.date_utils import parse_date, parse_datetime
-from datetime import datetime
 from typing import List
-from src.api.schemas.csv_import_dto import CsvImportErrorDTO
+import pandas as pd
+from sqlalchemy.orm import Session
+from fastapi import HTTPException
+from datetime import datetime
+from src.db import schemas
+from . import covid_manager
+from src.utils.date_utils import parse_date, parse_datetime
+from .schemas.csv_import_dto import CsvImportErrorDTO
 
-router = APIRouter()
 
-
-# Загрузка данных Ковида из CSV файла
-@router.post("/upload_csv/")
-async def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    if file.content_type != "text/csv":
-        raise HTTPException(status_code=400, detail="Неизвестный тип файла. Загрузите CSV файл.")
-
+def process_csv(file, db: Session) -> dict:
     errors: List[CsvImportErrorDTO] = []
     successful_rows = 0
 
@@ -39,7 +32,7 @@ async def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)
         if 'SNo' in df.columns:
             df = df.drop(columns=['SNo'])
 
-        # Переименование столбцы для соответствия модели
+        # Переименование столбцов для соответствия модели
         df = df.rename(columns=column_mapping)
 
         # Преобразование форматов дат
@@ -83,7 +76,7 @@ async def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)
                     )
 
                     # Проверка наличия существующего случая
-                    existing_case = crud.get_existing_covid_case(db, row['country'], state, observationDate)
+                    existing_case = covid_manager.get_existing_covid_case(db, row['country'], state, observationDate)
                     if existing_case:
                         # Если запись уже существует, добавляем ошибку
                         errors.append(CsvImportErrorDTO(
@@ -93,7 +86,7 @@ async def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)
                         continue
 
                     # Создание новой записи
-                    crud.create_covid_case(db, covid_case)
+                    covid_manager.create_covid_case(db, covid_case)
                     successful_rows += 1
 
                 except Exception as ex:
