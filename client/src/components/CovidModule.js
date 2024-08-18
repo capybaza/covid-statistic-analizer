@@ -28,13 +28,13 @@ const CovidModule = () => {
                     limit: pageSize
                 }
             });
-            console.log('Response data:', response.data); // Добавляем лог ответа
+            console.log('Response data:', response.data);
 
             // Обработка ответа
             if (response.data.records) {
                 setData(response.data.records);
                 setTotalCount(response.data.total_count);
-                setTotalPages(Math.ceil(response.data.total_count / pageSize)); // Расчет общего количества страниц
+                setTotalPages(Math.ceil(response.data.total_count / pageSize));
             } else {
                 console.error('Unexpected response format:', response.data);
             }
@@ -80,8 +80,8 @@ const CovidModule = () => {
     return (
         <div className="covid-module">
             <div className="actions">
-                <button onClick={() => setShowModal(true)}>Import CSV</button>
-                <button disabled>Create</button> {/* Кнопка "Создать" неактивная */}
+                <button onClick={() => setShowModal(true)}>Импорт</button>
+                <button disabled>Создать</button> {/* Кнопка "Создать" неактивная */}
             </div>
             <CsvImportModal
                 isOpen={showModal}
@@ -93,27 +93,27 @@ const CovidModule = () => {
                 <input
                     type="text"
                     name="state"
-                    placeholder="State"
+                    placeholder="Штат"
                     onChange={handleFilterChange}
                 />
                 <input
                     type="text"
                     name="country"
-                    placeholder="Country"
+                    placeholder="Страна"
                     onChange={handleFilterChange}
                 />
-                <button onClick={applyFilters}>Apply Filters</button>
+                <button onClick={applyFilters}>Применить</button>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>Observation Date</th>
-                        <th>State</th>
-                        <th>Country</th>
-                        <th>Last Update</th>
-                        <th>Confirmed</th>
-                        <th>Recovered</th>
-                        <th>Deaths</th>
+                        <th>Штат</th>
+                        <th>Страна</th>
+                        <th>Дата и время последнего обновления</th>
+                        <th>Кол-во заразившихся</th>
+                        <th>Кол-во выздоровевших</th>
+                        <th>Кол-во умерших</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,7 +131,7 @@ const CovidModule = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="7">No data available</td>
+                            <td colSpan="7">Нет данных</td>
                         </tr>
                     )}
                 </tbody>
@@ -141,14 +141,14 @@ const CovidModule = () => {
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1}
                 >
-                    Previous
+                    Предыдущая
                 </button>
-                <span>Page {page} of {totalPages} ({totalCount} records)</span>
+                <span>Страница {page} из {totalPages} ({totalCount} записей)</span>
                 <button
                     onClick={() => handlePageChange(page + 1)}
                     disabled={page === totalPages}
                 >
-                    Next
+                    Следующая
                 </button>
             </div>
         </div>
