@@ -1,18 +1,15 @@
 from fastapi import FastAPI
-from src.db.db import engine, Base
-from src.api.endpoints import router as api_router
+from fastapi.middleware.cors import CORSMiddleware
+from src.api.endpoints.covid import router as covid_router
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.on_event("startup")
-def on_startup():
-    Base.metadata.create_all(bind=engine)
-
-
-app.include_router(api_router)
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app.include_router(covid_router, prefix="/api")

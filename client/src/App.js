@@ -1,14 +1,27 @@
-import React from 'react';
-import CsvUpload from './components/CsvUpload';
+import React, { useState } from 'react';
+import Sidebar from './components/Sidebar';
+import CovidModule from './components/CovidModule';
 import './App.css';
 
 function App() {
+    const [selectedModule, setSelectedModule] = useState('covid');
+
+    const renderModule = () => {
+        switch (selectedModule) {
+            case 'covid':
+                return <CovidModule />;
+            // Сюда пихаем модули
+            default:
+                return <div>Select a module</div>;
+        }
+    };
+
     return (
-        <div className="App">
-            <header className="App-header">
-                <h1>Импорт данных о Covid-19</h1>
-                <CsvUpload />
-            </header>
+        <div className="app">
+            <Sidebar onSelectModule={setSelectedModule} />
+            <div className="main-content">
+                {renderModule()}
+            </div>
         </div>
     );
 }
