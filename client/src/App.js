@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { fetchHello } from './api';
+import React from 'react';
+import CsvUpload from './components/CsvUpload';
+import './App.css';
 
 function App() {
-    const [message, setMessage] = useState('');
-
-    useEffect(() => {
-        const getMessage = async () => {
-            const data = await fetchHello();
-            setMessage(data.message);
-        };
-
-        getMessage();
-    }, []);
-
     return (
         <div className="App">
             <header className="App-header">
-                <h1>{message}</h1>
+                <h1>Импорт данных о Covid-19</h1>
+                <CsvUpload />
             </header>
         </div>
     );
