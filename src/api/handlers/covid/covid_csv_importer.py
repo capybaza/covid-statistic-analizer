@@ -9,12 +9,13 @@ from src.utils.date_utils import parse_date, parse_datetime
 from .schemas.csv_import_dto import CsvImportErrorDTO
 
 
+# Парсинг и импорт CSV фала со статистикой Covid
 def process_csv(file, db: Session) -> dict:
     errors: List[CsvImportErrorDTO] = []
     successful_rows = 0
 
     try:
-        # Прочитать CSV файл в DataFrame
+        # Чтение CSV файла в DataFrame
         df = pd.read_csv(file.file)
 
         # Маппинг названий столбцов из CSV на поля модели
@@ -79,6 +80,7 @@ def process_csv(file, db: Session) -> dict:
                     existing_case = covid_manager.get_existing_covid_case(db, row['country'], state, observationDate)
                     if existing_case:
                         # Если запись уже существует, добавляем ошибку
+                        # TODO: должны пробрасывать из менеджера
                         errors.append(CsvImportErrorDTO(
                             row_number=index + 1,
                             error_message=f"Запись с данными {row['country']} {state} {observationDate} уже существует"
