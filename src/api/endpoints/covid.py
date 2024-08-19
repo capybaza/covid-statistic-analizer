@@ -1,5 +1,6 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Query
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -7,6 +8,7 @@ from src.db.db import get_db
 from src.api.handlers.covid.covid_csv_importer import process_csv, covid_manager
 from src.db import schemas, models
 from .schemas.covid_response import CovidResponse
+from ..handlers.covid.exceptions.validation_exception import ValidationException
 
 router = APIRouter()
 
@@ -32,6 +34,32 @@ async def upload_csv(file: UploadFile = File(...), db: Session = Depends(get_db)
     result = process_csv(file, db)
 
     return result
+
+
+# Обновление записи о Covid-19
+@router.put("/covid/update/{covid_case_id}", response_model=schemas.Covid, name="Обновление записи о Covid-19.")
+def update_covid_case(covid_case_id: int, covid_update: schemas.CovidUpdate, db: Session = Depends(get_db)):
+    try:
+        updated_covid_case = covid_manager.update_covid_case(db=db, covid_case_id=covid_case_id, covid_update=covid_update)
+        return updated_covid_case
+    except NoResultFound:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Запись не найдена для id {covid_case_id}")
+    except ValidationException as ve:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(ve))
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+# Удаление записи о Covid-19
+@router.delete("/covid/delete", name="Удаление записи о Covid-19.")
+def delete_covid_case(country: str, state: str, observation_date: date, db: Session = Depends(get_db)):
+    try:
+        covid_manager.delete_covid_case(db=db, country=country, state=state, observation_date=observation_date)
+        return {"detail": "Запись успешно удалена"}
+    except NoResultFound:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Запись не найдена для {country}, {state}, {observation_date}")
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
 # Получение записей о Covid-19
@@ -89,3 +117,15 @@ def get_covid_cases(
         "total_count": total_count,
         "records": covid_cases
     }
+
+
+# Получение записи Covid-19 по идентификатору
+@router.get("/covid/{covid_case_id}", response_model=schemas.Covid, name="Получение записи о Covid-19 по идентификатору.")
+def get_covid_case_by_id(covid_case_id: int, db: Session = Depends(get_db)):
+    try:
+        covid_case = db.query(models.Covid).filter(models.Covid.id == covid_case_id).one()
+        return covid_case
+    except NoResultFound:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Запись не найдена для id {covid_case_id}")
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
