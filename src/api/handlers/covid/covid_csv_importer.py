@@ -7,9 +7,10 @@ from src.db import schemas
 from . import covid_manager
 from src.utils.date_utils import parse_date, parse_datetime
 from .schemas.csv_import_dto import CsvImportErrorDTO
+from ...base.exceptions.base_buisness_exception import BaseValidationException
 
 
-# Парсинг и импорт CSV фала со статистикой Covid
+# Парсинг и импорт CSV файла со статистикой Covid
 def process_csv(file, db: Session) -> dict:
     errors: List[CsvImportErrorDTO] = []
     successful_rows = 0
@@ -36,10 +37,6 @@ def process_csv(file, db: Session) -> dict:
         # Переименование столбцов для соответствия модели
         df = df.rename(columns=column_mapping)
 
-        # Преобразование форматов дат
-        df['observationDate'] = df['observationDate'].apply(lambda x: parse_date(x) if pd.notna(x) else None)
-        df['lastUpdate'] = df['lastUpdate'].apply(lambda x: parse_datetime(x) if pd.notna(x) else datetime.now())
-
         # Обработка и валидизация данных
         required_columns = ['observationDate', 'state', 'country', 'lastUpdate', 'Confirmed', 'Recovered', 'Deaths']
         for col in required_columns:
@@ -47,56 +44,57 @@ def process_csv(file, db: Session) -> dict:
                 raise HTTPException(status_code=400, detail=f"Не найден столбец: {col}")
 
         # Начало транзакции
-        with db.begin():
-            for index, row in df.iterrows():
+        for index, row in df.iterrows():
+            try:
+                # Преобразование форматов дат с обработкой исключений
                 try:
-                    # Проверка корректности даты
-                    if pd.isna(row['observationDate']) or pd.isna(row['lastUpdate']):
-                        errors.append(CsvImportErrorDTO(
-                            row_number=index + 1,
-                            error_message="Некорректные значения даты"
-                        ))
-                        continue
-
-                    # Если поле 'state' пустое, то записываем 'Unknown'
-                    state = row['state'] if pd.notna(row['state']) and row['state'] != '' else 'Unknown'
-
-                    # Преобразование даты и времени
-                    observationDate = row['observationDate']
-                    lastUpdate = row['lastUpdate']
-
-                    # Создание объекта CovidCreate
-                    covid_case = schemas.CovidCreate(
-                        observationDate=observationDate,
-                        state=state,
-                        country=row['country'],
-                        lastUpdate=lastUpdate,
-                        Confirmed=row['Confirmed'],
-                        Recovered=row['Recovered'],
-                        Deaths=row['Deaths']
-                    )
-
-                    # Проверка наличия существующего случая
-                    existing_case = covid_manager.get_existing_covid_case(db, row['country'], state, observationDate)
-                    if existing_case:
-                        # Если запись уже существует, добавляем ошибку
-                        # TODO: должны пробрасывать из менеджера
-                        errors.append(CsvImportErrorDTO(
-                            row_number=index + 1,
-                            error_message=f"Запись с данными {row['country']} {state} {observationDate} уже существует"
-                        ))
-                        continue
-
-                    # Создание новой записи
-                    covid_manager.create_covid_case(db, covid_case)
-                    successful_rows += 1
-
-                except Exception as ex:
-                    # Записываем ошибку для данной строки
+                    observationDate = parse_date(row['observationDate']) if pd.notna(row['observationDate']) else None
+                    lastUpdate = parse_datetime(row['lastUpdate']) if pd.notna(row['lastUpdate']) else datetime.now()
+                except BaseValidationException as ve:
                     errors.append(CsvImportErrorDTO(
                         row_number=index + 1,
-                        error_message=str(ex)
+                        error_message=ve.message
                     ))
+                    continue
+
+                # Проверка корректности даты
+                if pd.isna(observationDate) or pd.isna(lastUpdate):
+                    errors.append(CsvImportErrorDTO(
+                        row_number=index + 1,
+                        error_message="Некорректные значения даты"
+                    ))
+                    continue
+
+                # Если поле 'state' пустое, то записываем 'Unknown'
+                state = row['state'] if pd.notna(row['state']) and row['state'] != '' else 'Unknown'
+
+                # Создание объекта CovidCreate
+                covid_case = schemas.CovidCreate(
+                    observationDate=observationDate,
+                    state=state,
+                    country=row['country'],
+                    lastUpdate=lastUpdate,
+                    Confirmed=row['Confirmed'],
+                    Recovered=row['Recovered'],
+                    Deaths=row['Deaths']
+                )
+
+                # Создание новой записи
+                covid_manager.create_covid_case(db, covid_case)
+                successful_rows += 1
+
+            except BaseValidationException as ve:
+                # Записываем ошибку валидации для данной строки
+                errors.append(CsvImportErrorDTO(
+                    row_number=index + 1,
+                    error_message=ve.message
+                ))
+            except Exception as ex:
+                # Записываем любую другую ошибку для данной строки
+                errors.append(CsvImportErrorDTO(
+                    row_number=index + 1,
+                    error_message=str(ex)
+                ))
 
         # Завершение транзакции
         db.commit()
@@ -108,3 +106,4 @@ def process_csv(file, db: Session) -> dict:
         # В случае глобальной ошибки
         db.rollback()
         raise HTTPException(status_code=500, detail=str(ex))
+

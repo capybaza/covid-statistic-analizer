@@ -16,6 +16,10 @@ class CovidCreate(CovidBase):
     pass
 
 
+class CovidUpdate(CovidBase):
+    pass
+
+
 class Covid(CovidBase):
     id: int
 
