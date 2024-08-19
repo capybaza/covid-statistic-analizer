@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Sidebar from './components/Sidebar';
-import CovidModule from './components/CovidModule';
-import './App.css';
+import Sidebar from './components/Sidebar/Sidebar';
+import CovidModule from './modules/CovidModule/CovidModule';
+import './styles/App.css';
 
 function App() {
     const [selectedModule, setSelectedModule] = useState('covid');

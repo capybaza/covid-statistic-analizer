@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { uploadCsv } from '../api';
-import Modal from './Modal';
+import { uploadCsv } from '../../api/api';
+import Modal from '../Modal/Modal';
 
 const CsvUpload = () => {
     const [file, setFile] = useState(null);

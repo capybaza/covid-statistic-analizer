@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
-import '../CsvImportModal.css';
+import './CsvImportModal.css';
 
 const CsvImportModal = ({ isOpen, onClose }) => {
   const [file, setFile] = useState(null);
