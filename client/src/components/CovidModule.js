@@ -107,7 +107,7 @@ const CovidModule = () => {
             <table>
                 <thead>
                     <tr>
-                        <th>Observation Date</th>
+                        <th>Дата наблюдения</th>
                         <th>Штат / Провинция</th>
                         <th>Страна</th>
                         <th>Дата и время последнего обновления</th>
