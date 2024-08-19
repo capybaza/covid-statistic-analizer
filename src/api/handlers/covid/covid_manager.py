@@ -62,15 +62,11 @@ def update_covid_case(db: Session, covid_case_id: int, covid_update: schemas.Cov
 
 
 # Удаление записи Covid
-def delete_covid_case(db: Session, country: str, state: str, observation_date: date):
+def delete_covid_case(db: Session, id: int):
     try:
-        covid_case = db.query(models.Covid).filter(
-            models.Covid.country == country,
-            models.Covid.state == state,
-            models.Covid.observationDate == observation_date
-        ).one()
+        covid_case = db.query(models.Covid).filter(models.Covid.id == id).one()
     except NoResultFound:
-        raise NoResultFound(f"Запись не найдена для {country}, {state}, {observation_date}")
+        raise NoResultFound(f"Запись не найдена для идентификатора {id}")
 
     db.delete(covid_case)
     db.commit()

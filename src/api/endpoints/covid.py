@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Query
 from sqlalchemy.exc import NoResultFound
@@ -51,13 +52,13 @@ def update_covid_case(covid_case_id: int, covid_update: schemas.CovidUpdate, db:
 
 
 # Удаление записи о Covid-19
-@router.delete("/covid/delete", name="Удаление записи о Covid-19.")
-def delete_covid_case(country: str, state: str, observation_date: date, db: Session = Depends(get_db)):
+@router.delete("/covid/delete/{id}", name="Удаление записи о Covid-19 по идентификатору.")
+def delete_covid_case(id: int, db: Session = Depends(get_db)):
     try:
-        covid_manager.delete_covid_case(db=db, country=country, state=state, observation_date=observation_date)
+        covid_manager.delete_covid_case(db=db, id=id)
         return {"detail": "Запись успешно удалена"}
     except NoResultFound:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Запись не найдена для {country}, {state}, {observation_date}")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Запись не найдена для идентификатора {id}")
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 

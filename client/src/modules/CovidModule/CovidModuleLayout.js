@@ -1,5 +1,7 @@
 import React from 'react';
 import CsvImportModal from '../../components/CsvImportModal/CsvImportModal';
+import RecordModal from '../../components/Modal/RecordModal';
+import ConfirmationModal from '../../components/Modal/ConfirmationModal';
 
 const CovidModuleLayout = ({
     data,
@@ -7,24 +9,43 @@ const CovidModuleLayout = ({
     totalPages,
     totalCount,
     showModal,
+    showRecordModal,
+    showDeleteModal,
     errors,
+    currentRecord,
     handleFilterChange,
     applyFilters,
     handlePageChange,
     handleUploadCsv,
-    setShowModal
+    setShowModal,
+    setShowRecordModal,
+    setShowDeleteModal,
+    handleCreateOrUpdate,
+    handleDelete,
+    setCurrentRecord
 }) => {
     return (
         <div className="covid-module">
             <div className="actions">
+                <button onClick={() => setShowRecordModal(true)}>Создать</button>
                 <button onClick={() => setShowModal(true)}>Импорт</button>
-                <button disabled>Создать</button> {/* Кнопка "Создать" неактивная */}
             </div>
             <CsvImportModal
                 isOpen={showModal}
                 onRequestClose={() => setShowModal(false)}
                 onUpload={handleUploadCsv}
                 errors={errors}
+            />
+            <RecordModal
+                isOpen={showRecordModal}
+                onRequestClose={() => setShowRecordModal(false)}
+                onSave={handleCreateOrUpdate}
+                record={currentRecord}
+            />
+            <ConfirmationModal
+                isOpen={showDeleteModal}
+                onRequestClose={() => setShowDeleteModal(false)}
+                onConfirm={handleDelete}
             />
             <div className="filters">
                 <input
@@ -51,6 +72,7 @@ const CovidModuleLayout = ({
                         <th>Кол-во заразившихся</th>
                         <th>Кол-во выздоровевших</th>
                         <th>Кол-во умерших</th>
+                        <th>Действия</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,17 +86,31 @@ const CovidModuleLayout = ({
                                 <td>{record.Confirmed}</td>
                                 <td>{record.Recovered}</td>
                                 <td>{record.Deaths}</td>
+                                <td>
+                                    <button onClick={() => {
+                                        setCurrentRecord(record);
+                                        setShowRecordModal(true);
+                                    }}>
+                                        Обновить
+                                    </button>
+                                    <button onClick={() => {
+                                        setCurrentRecord(record);
+                                        setShowDeleteModal(true);
+                                    }}>
+                                        Удалить
+                                    </button>
+                                </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="7">Нет данных</td>
+                            <td colSpan="8">Нет данных</td>
                         </tr>
                     )}
                 </tbody>
             </table>
             <div className="pagination">
-                <button
+            <button
                     onClick={() => handlePageChange(1)}
                     disabled={page === 1}
                 >
