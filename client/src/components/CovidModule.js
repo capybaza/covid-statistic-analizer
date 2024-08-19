@@ -138,6 +138,12 @@ const CovidModule = () => {
             </table>
             <div className="pagination">
                 <button
+                    onClick={() => handlePageChange(1)}
+                    disabled={page === 1}
+                >
+                    Первая
+                </button>
+                <button
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1}
                 >
@@ -149,6 +155,12 @@ const CovidModule = () => {
                     disabled={page === totalPages}
                 >
                     Следующая
+                </button>
+                <button
+                    onClick={() => handlePageChange(totalPages)}
+                    disabled={page === totalPages}
+                >
+                    Последняя
                 </button>
             </div>
         </div>
