@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Modal from 'react-modal';
 import './CsvImportModal.css';
+import ReactModal from "react-modal";
 
-const CsvImportModal = ({ isOpen, onClose }) => {
+const CsvImportModal = ({ isOpen, onRequestClose }) => {
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState(false);
@@ -40,11 +40,11 @@ const CsvImportModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onClose} className="modal" overlayClassName="overlay">
+    <ReactModal isOpen={isOpen} onRequestClose={onRequestClose} className="modal" overlayClassName="overlay">
       <h2>Импорт CSV файла</h2>
       <input type="file" onChange={handleFileChange} />
       <button onClick={handleImport}>Импортировать</button>
-      <button onClick={onClose}>Назад</button>
+      <button onClick={onRequestClose}>Назад</button>
 
       {errors.length > 0 && (
         <div>
@@ -60,7 +60,7 @@ const CsvImportModal = ({ isOpen, onClose }) => {
       )}
 
       {success && <div>Импорт прошел успешно!</div>}
-    </Modal>
+    </ReactModal>
   );
 };
 
