@@ -1,7 +1,8 @@
 import React from 'react';
 import CsvImportModal from '../../components/CsvImportModal/CsvImportModal';
-import RecordModal from '../../components/Modal/RecordModal';
 import ConfirmationModal from '../../components/Modal/ConfirmationModal';
+import UpdateRecordModal from "../../components/Modal/UpdateRecordModal";
+import CreateRecordModal from "../../components/Modal/CreateRecordModal";
 
 const CovidModuleLayout = ({
     data,
@@ -20,14 +21,21 @@ const CovidModuleLayout = ({
     setShowModal,
     setShowRecordModal,
     setShowDeleteModal,
-    handleCreateOrUpdate,
+    handleCreate,
+    handleUpdate,
     handleDelete,
     setCurrentRecord
 }) => {
+
     return (
         <div className="covid-module">
             <div className="actions">
-                <button onClick={() => setShowRecordModal(true)}>Создать</button>
+                <button onClick={() => {
+                    setCurrentRecord(null);
+                    setShowRecordModal(true);
+                }}>
+                    Создать
+                </button>
                 <button onClick={() => setShowModal(true)}>Импорт</button>
             </div>
             <CsvImportModal
@@ -36,12 +44,20 @@ const CovidModuleLayout = ({
                 onUpload={handleUploadCsv}
                 errors={errors}
             />
-            <RecordModal
-                isOpen={showRecordModal}
-                onRequestClose={() => setShowRecordModal(false)}
-                onSave={handleCreateOrUpdate}
-                record={currentRecord}
-            />
+            {currentRecord ? (
+                <UpdateRecordModal
+                    isOpen={showRecordModal}
+                    onRequestClose={() => setShowRecordModal(false)}
+                    onUpdate={handleUpdate}
+                    record={currentRecord}
+                />
+            ) : (
+                <CreateRecordModal
+                    isOpen={showRecordModal}
+                    onRequestClose={() => setShowRecordModal(false)}
+                    onCreate={handleCreate}
+                />
+            )}
             <ConfirmationModal
                 isOpen={showDeleteModal}
                 onRequestClose={() => setShowDeleteModal(false)}
@@ -110,7 +126,7 @@ const CovidModuleLayout = ({
                 </tbody>
             </table>
             <div className="pagination">
-            <button
+                <button
                     onClick={() => handlePageChange(1)}
                     disabled={page === 1}
                 >
