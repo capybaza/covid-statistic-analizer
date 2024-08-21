@@ -74,17 +74,23 @@ const CovidModule = () => {
         }
     };
 
-    const handleCreateOrUpdate = async (record) => {
+    const createRecord = async (record) => {
         try {
-            if (record.id) {
-                await axios.put(`/api/covid/update/${record.id}`, record);
-            } else {
-                await axios.post('/api/covid/create', record);
-            }
+            await axios.post('/api/covid/create', record);
             setShowRecordModal(false);
             await fetchCovidData();
         } catch (error) {
-            console.error("Error creating/updating record:", error);
+            console.error("Error creating record:", error);
+        }
+    };
+
+    const updateRecord = async (record) => {
+        try {
+            await axios.put(`/api/covid/update/${record.id}`, record);
+            setShowRecordModal(false);
+            await fetchCovidData();
+        } catch (error) {
+            console.error("Error updating record:", error);
         }
     };
 
@@ -98,29 +104,31 @@ const CovidModule = () => {
         }
     };
 
-    return (
-        <CovidModuleLayout
-            data={data}
-            page={page}
-            totalPages={totalPages}
-            totalCount={totalCount}
-            showModal={showModal}
-            showRecordModal={showRecordModal}
-            showDeleteModal={showDeleteModal}
-            errors={errors}
-            currentRecord={currentRecord}
-            handleFilterChange={handleFilterChange}
-            applyFilters={applyFilters}
-            handlePageChange={handlePageChange}
-            handleUploadCsv={handleUploadCsv}
-            setShowModal={setShowModal}
-            setShowRecordModal={setShowRecordModal}
-            setShowDeleteModal={setShowDeleteModal}
-            handleCreateOrUpdate={handleCreateOrUpdate}
-            handleDelete={handleDelete}
-            setCurrentRecord={setCurrentRecord}
-        />
-    );
+return (
+    <CovidModuleLayout
+        data={data}
+        page={page}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        showModal={showModal}
+        showRecordModal={showRecordModal}
+        showDeleteModal={showDeleteModal}
+        errors={errors}
+        currentRecord={currentRecord}
+        handleFilterChange={handleFilterChange}
+        applyFilters={applyFilters}
+        handlePageChange={handlePageChange}
+        handleUploadCsv={handleUploadCsv}
+        setShowModal={setShowModal}
+        setShowRecordModal={setShowRecordModal}
+        setShowDeleteModal={setShowDeleteModal}
+        handleCreate={createRecord}
+        handleUpdate={updateRecord}
+        handleDelete={handleDelete}
+        setCurrentRecord={setCurrentRecord}
+    />
+);
+
 };
 
 export default CovidModule;

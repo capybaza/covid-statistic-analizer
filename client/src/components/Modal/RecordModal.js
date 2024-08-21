@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import BaseModal from './BaseModal';
+import Modal from 'react-modal';
 
-const RecordModal = ({ isOpen, onRequestClose, onSave, record }) => {
+const RecordModal = ({ isOpen, onRequestClose, onSave, record, title }) => {
     const [formData, setFormData] = useState({
         observationDate: '',
         state: '',
@@ -15,6 +15,16 @@ const RecordModal = ({ isOpen, onRequestClose, onSave, record }) => {
     useEffect(() => {
         if (record) {
             setFormData(record);
+        } else {
+            setFormData({
+                observationDate: '',
+                state: '',
+                country: '',
+                lastUpdate: '',
+                Confirmed: 0,
+                Recovered: 0,
+                Deaths: 0
+            });
         }
     }, [record]);
 
@@ -29,11 +39,8 @@ const RecordModal = ({ isOpen, onRequestClose, onSave, record }) => {
     };
 
     return (
-        <BaseModal
-            isOpen={isOpen}
-            onClose={onRequestClose}
-            title={record ? 'Обновить запись' : 'Создать запись'}
-        >
+        <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+            <h2>{title}</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -86,7 +93,7 @@ const RecordModal = ({ isOpen, onRequestClose, onSave, record }) => {
                 />
                 <button type="submit">{record ? 'Сохранить' : 'Создать'}</button>
             </form>
-        </BaseModal>
+        </Modal>
     );
 };
 
