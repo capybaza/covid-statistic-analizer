@@ -1,31 +1,156 @@
-.App {
-    text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+/* Основной стиль для всего приложения */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.app {
+    display: flex;
+    height: 100vh;
 }
 
 .App-header {
+    grid-column: 1 / -1;
     background-color: #282c34;
     padding: 20px;
     color: white;
+    text-align: center;
 }
 
-.Modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    bottom: auto;
-    transform: translate(-50%, -50%);
-    background: white;
+.actions,
+.filters {
+    margin-bottom: 20px;
+    margin-left: 250px;
+}
+
+/* Основной контент */
+.content {
+    margin-left: 250px; /* Должен соответствовать ширине боковой панели */
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
-.Overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75);
+/* Кнопка открытия модального окна */
+.open-modal-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Стиль текстовых полей ввода */
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #efe4e4;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Общий стиль кнопок */
+button {
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Более тёмный оттенок синего при наведении */
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Фильтры */
+.filters {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.filters input {
+    margin-right: 10px;
+}
+
+.filters button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.filters button:hover {
+    background-color: #0056b3;
+}
+
+/* Таблица данных */
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-left: 250px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+td {
+    background-color: #ffffff;
+}
+
+/* Фиксированная высота строк таблицы */
+table tr {
+    height: 20px;
+}
+
+/* Пагинация */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.covid-module {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

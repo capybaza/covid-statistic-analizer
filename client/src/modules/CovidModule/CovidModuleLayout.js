@@ -1,5 +1,5 @@
 import React from 'react';
-import CsvImportModal from '../../components/CsvImportModal/CsvImportModal';
+import CsvImportModal from '../../components/Modal/CsvImportModal';
 import RecordModal from '../../components/Modal/RecordModal';
 import ConfirmationModal from '../../components/Modal/ConfirmationModal';
 

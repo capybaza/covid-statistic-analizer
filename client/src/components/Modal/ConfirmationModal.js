@@ -1,14 +1,13 @@
 import React from 'react';
-import Modal from 'react-modal';
+import BaseModal from './BaseModal';
 
 const ConfirmationModal = ({ isOpen, onRequestClose, onConfirm }) => {
     return (
-        <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
-            <h2>Подтверждение удаления</h2>
+        <BaseModal isOpen={isOpen} onClose={onRequestClose} title="Подтверждение удаления">
             <p>Вы уверены, что хотите удалить эту запись?</p>
             <button onClick={onConfirm}>Да</button>
             <button onClick={onRequestClose}>Нет</button>
-        </Modal>
+        </BaseModal>
     );
 };
 

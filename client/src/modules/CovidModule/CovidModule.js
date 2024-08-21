@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import CovidModuleLayout from './CovidModuleLayout';
-import './CovidModule.css';
+import '../../styles/App.css';
 
 const CovidModule = () => {
     const [filters, setFilters] = useState({});

@@ -1,0 +1,24 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 250px; /* Ширина боковой панели */
+  background-color: #f4f4f4;
+  padding: 10px;
+  height: 100vh; /* Высота на весь экран */
+  position: fixed; /* Фиксированное положение */
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sidebar button:hover {
+  background-color: #0056b3;
+}
