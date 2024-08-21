@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import CsvImportModal from '../../components/Modal/CsvImportModal';
 import RecordModal from '../../components/Modal/RecordModal';
 import ConfirmationModal from '../../components/Modal/ConfirmationModal';
@@ -34,6 +35,10 @@ const CovidModuleLayout = ({
         }
         setShowRecordModal(false);
     };
+
+    // Функция для форматирования дат
+    const formatDateTime = (date) => moment(date).format('DD.MM.YYYY HH:mm:ss');
+    const formatDate = (date) => moment(date).format('DD.MM.YYYY');
 
     return (
         <div className="covid-module">
@@ -93,10 +98,10 @@ const CovidModuleLayout = ({
                     {Array.isArray(data) && data.length > 0 ? (
                         data.map((record) => (
                             <tr key={record.id}>
-                                <td>{record.observationDate}</td>
+                                <td>{formatDate(record.observationDate)}</td>
                                 <td>{record.state}</td>
                                 <td>{record.country}</td>
-                                <td>{record.lastUpdate}</td>
+                                <td>{formatDateTime(record.lastUpdate)}</td>
                                 <td>{record.Confirmed}</td>
                                 <td>{record.Recovered}</td>
                                 <td>{record.Deaths}</td>
