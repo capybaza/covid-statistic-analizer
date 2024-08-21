@@ -1,5 +1,5 @@
 import React from 'react';
-import CsvImportModal from '../../components/CsvImportModal/CsvImportModal';
+import CsvImportModal from '../../components/Modal/CsvImportModal';
 import RecordModal from '../../components/Modal/RecordModal';
 import ConfirmationModal from '../../components/Modal/ConfirmationModal';
 
@@ -25,16 +25,23 @@ const CovidModuleLayout = ({
     handleDelete,
     setCurrentRecord
 }) => {
+    // Определение метода сохранения в зависимости от наличия текущей записи
+    const handleSave = (formData) => {
+        if (currentRecord) {
+            handleUpdate(formData);
+        } else {
+            handleCreate(formData);
+        }
+        setShowRecordModal(false);
+    };
 
     return (
         <div className="covid-module">
             <div className="actions">
                 <button onClick={() => {
-                    setCurrentRecord(null);
+                    setCurrentRecord(null);  // Сбрасываем текущую запись для создания новой
                     setShowRecordModal(true);
-                }}>
-                    Создать
-                </button>
+                }}>Создать</button>
                 <button onClick={() => setShowModal(true)}>Импорт</button>
             </div>
             <CsvImportModal
@@ -43,20 +50,12 @@ const CovidModuleLayout = ({
                 onUpload={handleUploadCsv}
                 errors={errors}
             />
-            {currentRecord ? (
-                <UpdateRecordModal
-                    isOpen={showRecordModal}
-                    onRequestClose={() => setShowRecordModal(false)}
-                    onUpdate={handleUpdate}
-                    record={currentRecord}
-                />
-            ) : (
-                <CreateRecordModal
-                    isOpen={showRecordModal}
-                    onRequestClose={() => setShowRecordModal(false)}
-                    onCreate={handleCreate}
-                />
-            )}
+            <RecordModal
+                isOpen={showRecordModal}
+                onClose={() => setShowRecordModal(false)}
+                onSave={handleSave}
+                record={currentRecord}
+            />
             <ConfirmationModal
                 isOpen={showDeleteModal}
                 onRequestClose={() => setShowDeleteModal(false)}
