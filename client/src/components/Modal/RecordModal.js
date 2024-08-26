@@ -36,7 +36,7 @@ const RecordModal = ({ isOpen, onClose, onSave, record }) => {
         >
             <form onSubmit={handleSubmit}>
                 <input
-                    type="text"
+                    type="date"
                     name="observationDate"
                     placeholder="Дата наблюдения"
                     value={formData.observationDate}
@@ -57,7 +57,7 @@ const RecordModal = ({ isOpen, onClose, onSave, record }) => {
                     onChange={handleChange}
                 />
                 <input
-                    type="text"
+                    type="date"
                     name="lastUpdate"
                     placeholder="Дата и время последнего обновления"
                     value={formData.lastUpdate}

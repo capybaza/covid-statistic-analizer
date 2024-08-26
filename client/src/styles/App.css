@@ -50,7 +50,7 @@ input[type="file"],
 input[type="date"] {
     display: block;
     width: calc(100% - 40px);
-    max-width: 160px;
+    max-width: 500px;
     margin: 15px auto;
     padding: 10px;
     background-color: #efe4e4;
@@ -107,14 +107,16 @@ button:hover {
 }
 
 .filters input[type="text"],
+.filters input[type="number"],
+.filters input[type="date"],
 .filters button {
-    flex: 1 1 200px;
-    max-width: 300px;
+    flex: 1 1 190px;
+    max-width: 250px;
 }
 
 .filters button {
     flex: 0 0 auto;
-    padding: 10px 20px;
+    padding: 10px 40px;
     background-color: #007bff;
     color: white;
     border: none;
