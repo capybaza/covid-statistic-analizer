@@ -50,7 +50,7 @@ input[type="file"],
 input[type="date"] {
     display: block;
     width: calc(100% - 40px);
-    max-width: 500px;
+    max-width: 160px;
     margin: 15px auto;
     padding: 10px;
     background-color: #efe4e4;

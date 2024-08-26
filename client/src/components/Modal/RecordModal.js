@@ -84,8 +84,8 @@ const RecordModal = ({ isOpen, onClose, onSave, record }) => {
                     value={formData.Deaths}
                     onChange={handleChange}
                 />
-                <button type="submit">{record ? 'Сохранить' : 'Создать'}</button>
             </form>
+            <button type="submit">{record ? 'Сохранить' : 'Создать'}</button>
         </BaseModal>
     );
 };
