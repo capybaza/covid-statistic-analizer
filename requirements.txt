@@ -13,3 +13,4 @@ starlette~=0.38.2
 python-dateutil~=2.9.0.post0
 uvicorn
 python-multipart
+psycopg2
