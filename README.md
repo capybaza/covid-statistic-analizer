@@ -43,7 +43,119 @@ ER диаграмма БД
 ![image](https://github.com/user-attachments/assets/40edb07b-1ba4-45ac-94b8-1b361a459872)  
 
 ## Структура проекта  
+```
+covid-statistic-analizer/
+├─.env
+├─.gitignore
+├─alembic.ini
+├─client/
+│ ├─package-lock.json
+│ ├─package.json
+│ ├─public/
+│ │ ├─favicon.ico
+│ │ ├─index.html
+│ │ ├─logo192.png
+│ │ ├─logo512.png
+│ │ ├─manifest.json
+│ │ └─robots.txt
+│ └─src/
+│   ├─api/
+│   │ └─api.js
+│   ├─App.js
+│   ├─assets/
+│   │ ├─create.svg
+│   │ ├─delete.svg
+│   │ ├─edit.svg
+│   │ ├─import.svg
+│   │ └─logo.svg
+│   ├─components/
+│   │ ├─Modal/
+│   │ │ ├─BaseModal.js
+│   │ │ ├─ConfirmationModal.js
+│   │ │ ├─CsvImportModal.js
+│   │ │ └─RecordModal.js
+│   │ └─Sidebar/
+│   │   └─Sidebar.js
+│   ├─index.js
+│   ├─modules/
+│   │ └─CovidModule/
+│   │   └─CovidModule.js
+│   ├─reportWebVitals.js
+│   ├─styles/
+│   │ ├─App.css
+│   │ ├─BaseModal.css
+│   │ ├─index.css
+│   │ └─Sidebar.css
+│   └─tests/
+│     ├─App.test.js
+│     └─setupTests.js
+├─README.md
+├─requirements.txt
+└─src/
+  ├─api/
+  │ ├─base/
+  │ │ ├─exceptions/
+  │ │ │ ├─base_buisness_exception.py
+  │ │ │ └─__init__.py
+  │ │ └─__init__.py
+  │ ├─endpoints/
+  │ │ ├─covid.py
+  │ │ ├─covid_dashboard.py
+  │ │ ├─schemas/
+  │ │ │ ├─covid_response.py
+  │ │ │ └─__init__.py
+  │ │ └─__init__.py
+  │ ├─endpoints.py
+  │ ├─handlers/
+  │ │ ├─app.py
+  │ │ ├─covid/
+  │ │ │ ├─covid_csv_importer.py
+  │ │ │ ├─covid_manager.py
+  │ │ │ ├─exceptions/
+  │ │ │ │ ├─validation_exception.py
+  │ │ │ │ └─__init__.py
+  │ │ │ ├─schemas/
+  │ │ │ │ ├─csv_import_dto.py
+  │ │ │ │ └─__init__.py
+  │ │ │ └─__init__.py
+  │ │ └─__init__.py
+  │ ├─test_analize/
+  │ │ ├─analize.ipynb
+  │ │ └─db_analize.ipynb
+  │ └─__init__.py
+  ├─db/
+  │ ├─db.py
+  │ ├─migrations/
+  │ │ ├─env.py
+  │ │ ├─README
+  │ │ ├─script.py.mako
+  │ │ └─versions/
+  │ │   ├─ac122fc04882_initial_migration.py
+  │ │   └─f3d554abd65f_update_covid_datetime_columns.py
+  │ ├─models.py
+  │ ├─raw/
+  │ │ ├─covid_19_data.csv
+  │ │ ├─covid_test_import.csv
+  │ │ ├─time_series_covid_19_confirmed.csv
+  │ │ ├─time_series_covid_19_confirmed_US.csv
+  │ │ ├─time_series_covid_19_deaths.csv
+  │ │ ├─time_series_covid_19_deaths_US.csv
+  │ │ └─time_series_covid_19_recovered.csv
+  │ ├─schemas.py
+  │ └─__init__.py
+  ├─main.py
+  ├─utils/
+  │ ├─date_utils.py
+  │ ├─exceptions/
+  │ │ ├─parse_datetime_exception.py
+  │ │ └─__init__.py
+  │ ├─package-lock.json
+  │ ├─package.json
+  │ ├─project_structure_vizualizator.py
+  │ └─__init__.py
+  └─__init__.py
 
+```
 
 
 
