@@ -14,3 +14,5 @@ python-dateutil~=2.9.0.post0
 uvicorn
 python-multipart
 psycopg2
+graphviz
+treelib
